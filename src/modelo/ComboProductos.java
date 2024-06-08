@@ -1,7 +1,10 @@
 package modelo;
 
+import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
@@ -28,7 +31,6 @@ public class ComboProductos {
                 if (st != null) st.close();
                 if (conexion != null) conexion.close();
             } catch (SQLException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -36,13 +38,13 @@ public class ComboProductos {
     public String[] obtenerDetalles(String tabla1, String valor, String columna1, String columna2) {
         String sql = "SELECT " + columna1 + ", " + columna2 + " FROM " + tabla1 + " WHERE nombre = ?";
         Conexion con = new Conexion();
-        Connection conexion = con.Conexion();
+        Connection conexion = (Connection) con.Conexion();
         String[] detalles = new String[2];
         PreparedStatement pst = null;
         ResultSet rs = null;
 
         try {
-            pst = conexion.prepareStatement(sql);
+            pst = (PreparedStatement) conexion.prepareStatement(sql);
             pst.setString(1, valor);
             rs = pst.executeQuery();
             if (rs.next()) {
